@@ -57,6 +57,10 @@ module.exports = function module (moduleOptions) {
 
   // Generate sitemap.xml in dist
   this.nuxt.hook('generate:done', async () => {
+    if (!cache) {
+      // Create a cache on incremental builds
+      cache = createCache([], options)
+    }
     const routes = await cache.get('routes')
     const sitemap = await createSitemap(options, routes)
     const xml = await sitemap.toXML()
